@@ -1,0 +1,15 @@
+{
+    "name" : "alterway/component-workflow",
+    "description": "Workflow components heavily used by Alter Way",
+    "autoload": {
+        "psr-4": {
+            "Alterway\\Component\\Workflow\\": "src/"
+        }
+    },
+    "require": {
+        "symfony/event-dispatcher" : "2.3.*"
+    },
+    "require-dev": {
+        "atoum/atoum": "dev-master"
+    }
+}
