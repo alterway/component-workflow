@@ -1,6 +1,6 @@
 {
     "name" : "alterway/component-workflow",
-    "description": "Workflow components heavily used by Alter Way",
+    "description": "Workflow component heavily used by Alter Way",
     "autoload": {
         "psr-4": {
             "Alterway\\Component\\Workflow\\": "src/"
