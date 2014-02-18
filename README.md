@@ -1,4 +1,4 @@
-# Workflow Component
+# Workflow Component [![Build Status](https://travis-ci.org/alterway/component-workflow.png?branch=master)](https://travis-ci.org/alterway/component-workflow)
 
 This component provides a workflow engine written as a PHP library.
 
