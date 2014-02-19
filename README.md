@@ -102,7 +102,7 @@ class ArticleService
         $context = new Context();
         $context->add(/* ... */);
 
-        $this->nextStep(null, $context);
+        $this->advance(null, $context);
     }
 
     public function publish(Article $article)
@@ -110,7 +110,7 @@ class ArticleService
         $context = new Context();
         $context->add(/* ... */);
 
-        $this->nextStep('article.draft', $context);
+        $this->advance('article.draft', $context);
     }
 
     public function delete(Article $article)
@@ -118,7 +118,7 @@ class ArticleService
         $context = new Context();
         $context->add(/* ... */);
 
-        $this->nextStep('article.published', $context);
+        $this->advance('article.published', $context);
     }
 
     public function archive(Article $article)
@@ -126,7 +126,7 @@ class ArticleService
         $context = new Context();
         $context->add(/* ... */);
 
-        $this->nextStep('article.published', $context);
+        $this->advance('article.published', $context);
     }
 
     private function advance($token, ContextInterface $context)
