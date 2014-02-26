@@ -1,6 +1,7 @@
 {
     "name" : "alterway/component-workflow",
     "description": "Workflow component heavily used by Alter Way",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Alterway\\Component\\Workflow\\": "src/"
