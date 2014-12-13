@@ -11,6 +11,7 @@
         "symfony/event-dispatcher" : "2.3.*"
     },
     "require-dev": {
-        "atoum/atoum": "dev-master"
+        "atoum/atoum": "dev-master",
+        "phpspec/phpspec": "~2.1"
     }
 }
