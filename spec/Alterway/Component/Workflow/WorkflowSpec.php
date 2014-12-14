@@ -14,12 +14,13 @@ class WorkflowSpec extends ObjectBehavior
 {
     function let(EventDispatcherInterface $dispatcher, Spec $specA, Spec $specAB, Spec $specAC)
     {
-        $builder = (new Builder($dispatcher->getWrappedObject()))
+        $builder = new Builder($dispatcher->getWrappedObject());
+        $builder
             ->open('A', $specA->getWrappedObject())
             ->link('A', 'B', $specAB->getWrappedObject())
             ->link('A', 'C', $specAC->getWrappedObject());
 
-        $this->beConstructedThrough([$builder, 'getWorkflow']);
+        $this->beConstructedThrough(array($builder, 'getWorkflow'));
     }
 
     function it_is_initializable()
