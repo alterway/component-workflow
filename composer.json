@@ -8,7 +8,7 @@
         }
     },
     "require": {
-        "symfony/event-dispatcher" : "2.3.*"
+        "symfony/event-dispatcher" : "~2.3"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.1"
