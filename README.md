@@ -167,7 +167,7 @@ class ArticleSubscriber implements EventSubscriberInterface
 
 ## Contributing
 
-Pretty please, with sugar on top, atoum tests are provided and should be green when contributing code.
+Pretty please, with sugar on top, phpspec specifications are provided and should be green when contributing code.
 
 ## References
 
