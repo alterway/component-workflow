@@ -48,22 +48,41 @@ use Alterway\Component\Workflow\SpecificationInterface;
 
 class DraftableArticleSpecification implements SpecificationInterface
 {
-    public function isSatisfiedBy(ContextInterface $context) { /* ... */ }
+    public function isSatisfiedBy(ContextInterface $context)
+    {
+        // an article can always be drafted
+        return true;
+    }
 }
 
 class PublishableArticleSpecification implements SpecificationInterface
 {
-    public function isSatisfiedBy(ContextInterface $context) { /* ... */ }
+    public function isSatisfiedBy(ContextInterface $context)
+    {
+        // an article needs two reviews to be published
+        return 1 < count($context->get('article')->getReviews());
+    }
 }
 
 class DeletableArticleSpecification implements SpecificationInterface
 {
-    public function isSatisfiedBy(ContextInterface $context) { /* ... */ }
+    public function isSatisfiedBy(ContextInterface $context)
+    {
+        // an article can always be deleted
+        return true;
+    }
 }
 
 class ArchivableArticleSpecification implements SpecificationInterface
 {
-    public function isSatisfiedBy(ContextInterface $context) { /* ... */ }
+    public function isSatisfiedBy(ContextInterface $context)
+    {
+        // an article needs to be one month old to be archived
+        $publishedAtPlusOneMonth = clone $context->get('publishedAt');
+        $publishedAtPlusOneMonth->modify('+1 month');
+
+        return $publishedAtPlusOneMonth < $context->get('now');
+    }
 }
 ```
 
@@ -99,44 +118,43 @@ class ArticleService
 
     public function create(Article $article)
     {
-        $context = new Context();
-        $context->add(/* ... */);
-
-        $this->advance(null, $context);
+        $this->advance($article, new Context());
     }
 
     public function publish(Article $article)
     {
         $context = new Context();
-        $context->add(/* ... */);
+        $context->set('article', $article);
 
-        $this->advance('article.draft', $context);
+        $this->advance($article, $context);
     }
 
     public function delete(Article $article)
     {
-        $context = new Context();
-        $context->add(/* ... */);
-
-        $this->advance('article.published', $context);
+        $this->advance($article, new Context());
     }
 
     public function archive(Article $article)
     {
         $context = new Context();
-        $context->add(/* ... */);
+        $context->set('publishedAt', $article->getPublishedAt());
+        $context->set('now', new \DateTime());
 
-        $this->advance('article.published', $context);
+        $this->advance($article, $context);
     }
 
-    private function advance($token, ContextInterface $context)
+    private function advance($article, ContextInterface $context)
     {
-        $this->workflow->initialize($token)->next($context);
+        try {
+            $this->workflow->initialize($article->getToken())->next($context);
+        } catch (\LogicException $e) {
+            // the workflow reports a problem
+        }
     }
 }
 ```
 
-Finally, you have to listen on events dispatched by the workflow to attach the business behaviour:
+Finally, you have to listen on events dispatched by the workflow to attach the business behavior:
 ```php
 namespace BlogEngine\Domain\Event;
 
@@ -178,12 +196,14 @@ Pretty please, with sugar on top, phpspec specifications are provided and should
 * [Graph theory](http://en.wikipedia.org/wiki/Graph_theory)
 * [Specification pattern](http://en.wikipedia.org/wiki/Specification_pattern)
 
-### Workflows in PHP
+### PHP
 
 * [An activity based workflow engine](http://www.tonymarston.net/php-mysql/workflow.html)
 * [eZ Workflow component](http://www.ezcomponents.org/docs/api/latest/introduction_Workflow.html)
 * [Yii simpleWorkflow extension](http://www.yiiframework.com/extension/simpleworkflow/)
 * [Galaxia workflow engine](http://workflow.tikiwiki.org/tiki-index.php?page=homepage)
+* [State pattern by Sebastian Bergmann](https://github.com/sebastianbergmann/state)
+* [Petrinet Framework](https://github.com/florianv/petrinet)
 
 ## Licencing
 
