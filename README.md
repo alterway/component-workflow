@@ -68,8 +68,8 @@ class DeletableArticleSpecification implements SpecificationInterface
 {
     public function isSatisfiedBy(ContextInterface $context)
     {
-        // an article can always be deleted
-        return true;
+        // an article can always be deleted if requested
+        return 'delete' === $context->get('action');
     }
 }
 
@@ -81,7 +81,7 @@ class ArchivableArticleSpecification implements SpecificationInterface
         $publishedAtPlusOneMonth = clone $context->get('publishedAt');
         $publishedAtPlusOneMonth->modify('+1 month');
 
-        return $publishedAtPlusOneMonth < $context->get('now');
+        return 'archive' === $context->get('action') && $publishedAtPlusOneMonth < $context->get('now');
     }
 }
 ```
@@ -131,12 +131,16 @@ class ArticleService
 
     public function delete(Article $article)
     {
-        $this->advance($article, new Context());
+        $context = new Context();
+        $context->set('action', 'delete');
+
+        $this->advance($article, $context);
     }
 
     public function archive(Article $article)
     {
         $context = new Context();
+        $context->set('action', 'archive');
         $context->set('publishedAt', $article->getPublishedAt());
         $context->set('now', new \DateTime());
 
